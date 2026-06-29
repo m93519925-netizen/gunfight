@@ -8,181 +8,78 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Segoe UI', Arial, sans-serif; background: #0a0a0f; color: #e0e0e0; overflow: hidden; }
   canvas { display: block; }
-
-  /* ---------- Screens ---------- */
-  .screen {
-    position: fixed; inset: 0; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; z-index: 100;
-    background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 50%, #0d0d1a 100%);
-  }
+  .screen { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; background: linear-gradient(135deg, #0d0d1a 0%, #1a1a2e 50%, #0d0d1a 100%); }
   .screen.hidden { display: none; }
-
-  /* Connect Screen */
   .connect-box { text-align: center; padding: 40px; }
   .connect-box h1 { font-size: 2.5rem; margin-bottom: 8px; color: #4a9eff; letter-spacing: 2px; }
   .connect-box p { color: #888; margin-bottom: 30px; }
-  .connect-box input {
-    padding: 12px 20px; font-size: 1.1rem; width: 280px; border-radius: 8px;
-    border: 2px solid #333; background: #1a1a2e; color: #fff; outline: none;
-    transition: border-color .2s;
-  }
+  .connect-box input { padding: 12px 20px; font-size: 1.1rem; width: 280px; border-radius: 8px; border: 2px solid #333; background: #1a1a2e; color: #fff; outline: none; transition: border-color .2s; }
   .connect-box input:focus { border-color: #4a9eff; }
-  .btn {
-    padding: 12px 28px; font-size: 1.1rem; border: none; border-radius: 8px;
-    cursor: pointer; background: #4a9eff; color: #fff; font-weight: 600;
-    transition: all .2s; margin: 4px;
-  }
+  .btn { padding: 12px 28px; font-size: 1.1rem; border: none; border-radius: 8px; cursor: pointer; background: #4a9eff; color: #fff; font-weight: 600; transition: all .2s; margin: 4px; }
   .btn:hover { background: #3a8eef; transform: translateY(-1px); }
-  .btn.secondary { background: #333; }
-  .btn.secondary:hover { background: #444; }
-  .btn.danger { background: #e74c3c; }
-  .btn.danger:hover { background: #c0392b; }
-
-  /* Lobby */
+  .btn.secondary { background: #333; } .btn.secondary:hover { background: #444; }
+  .btn.danger { background: #e74c3c; } .btn.danger:hover { background: #c0392b; }
   .lobby-box { width: 700px; max-width: 90vw; }
   .lobby-box h2 { text-align: center; margin-bottom: 20px; color: #4a9eff; }
   .lobby-top { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; }
-  .lobby-top select, .lobby-top input {
-    padding: 10px; border-radius: 6px; border: 2px solid #333;
-    background: #1a1a2e; color: #fff; outline: none;
-  }
+  .lobby-top select, .lobby-top input { padding: 10px; border-radius: 6px; border: 2px solid #333; background: #1a1a2e; color: #fff; outline: none; }
   .room-list { max-height: 400px; overflow-y: auto; border-radius: 8px; border: 1px solid #333; }
-  .room-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 18px; border-bottom: 1px solid #222; transition: background .15s;
-  }
+  .room-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid #222; transition: background .15s; }
   .room-item:hover { background: #1a1a2e; }
   .room-item:last-child { border-bottom: none; }
   .room-name { font-weight: 600; font-size: 1.05rem; }
   .room-map { color: #888; font-size: .9rem; }
   .room-players { color: #4a9eff; font-weight: 600; margin: 0 15px; }
   .empty-state { text-align: center; padding: 40px; color: #666; }
-
-  /* Room waiting */
   .room-box { width: 500px; max-width: 90vw; text-align: center; }
   .room-box h2 { margin-bottom: 5px; color: #4a9eff; }
   .room-box .map-name { color: #888; margin-bottom: 20px; }
   .player-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 20px 0; }
-  .player-chip {
-    padding: 10px 18px; border-radius: 20px; background: #1a1a2e;
-    border: 2px solid #333; display: flex; align-items: center; gap: 8px;
-  }
+  .player-chip { padding: 10px 18px; border-radius: 20px; background: #1a1a2e; border: 2px solid #333; display: flex; align-items: center; gap: 8px; }
   .player-chip .dot { width: 12px; height: 12px; border-radius: 50%; }
-
-  /* HUD */
   #hud { position: fixed; inset: 0; pointer-events: none; z-index: 50; }
   #hud.hidden { display: none; }
-  .crosshair {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    width: 24px; height: 24px;
-  }
-  .crosshair::before, .crosshair::after {
-    content: ''; position: absolute; background: rgba(0,255,100,0.8);
-  }
+  .crosshair { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; }
+  .crosshair::before, .crosshair::after { content: ''; position: absolute; background: rgba(0,255,100,0.8); }
   .crosshair::before { top: 50%; left: 0; width: 100%; height: 2px; transform: translateY(-50%); }
   .crosshair::after { left: 50%; top: 0; height: 100%; width: 2px; transform: translateX(-50%); }
-  .crosshair .dot {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-    width: 4px; height: 4px; background: rgba(0,255,100,0.9); border-radius: 50%;
-  }
-
-  .health-bar {
-    position: absolute; bottom: 25px; left: 25px; width: 220px;
-  }
+  .crosshair .dot { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 4px; height: 4px; background: rgba(0,255,100,0.9); border-radius: 50%; }
+  .health-bar { position: absolute; bottom: 25px; left: 25px; width: 220px; }
   .health-bar .label { font-size: .85rem; color: #aaa; margin-bottom: 4px; }
-  .health-bar .bar-bg {
-    width: 100%; height: 22px; background: rgba(0,0,0,0.6); border-radius: 4px;
-    border: 1px solid #444; overflow: hidden;
-  }
-  .health-bar .bar-fill {
-    height: 100%; background: linear-gradient(90deg, #e74c3c, #f39c12, #2ecc71);
-    transition: width .3s; width: 100%;
-  }
-  .health-bar .bar-text {
-    position: absolute; top: 22px; left: 0; width: 100%; text-align: center;
-    font-weight: 700; font-size: .9rem; text-shadow: 0 0 4px #000;
-  }
-
-  .ammo-display {
-    position: absolute; bottom: 25px; right: 25px; text-align: right;
-  }
+  .health-bar .bar-bg { width: 100%; height: 22px; background: rgba(0,0,0,0.6); border-radius: 4px; border: 1px solid #444; overflow: hidden; position: relative; }
+  .health-bar .bar-fill { height: 100%; background: linear-gradient(90deg, #e74c3c, #f39c12, #2ecc71); transition: width .3s; width: 100%; }
+  .health-bar .bar-text { position: absolute; top: 0; left: 0; width: 100%; text-align: center; line-height: 22px; font-weight: 700; font-size: .9rem; text-shadow: 0 0 4px #000; }
+  .ammo-display { position: absolute; bottom: 25px; right: 25px; text-align: right; }
   .ammo-display .weapon { font-size: .8rem; color: #888; }
   .ammo-display .count { font-size: 2rem; font-weight: 700; text-shadow: 0 0 6px #000; }
-
-  .killfeed {
-    position: absolute; top: 15px; right: 15px; display: flex; flex-direction: column; gap: 5px;
-  }
-  .killfeed-item {
-    background: rgba(0,0,0,0.7); padding: 5px 12px; border-radius: 4px;
-    font-size: .85rem; border-left: 3px solid #e74c3c; animation: fadeIn .3s;
-  }
+  .killfeed { position: absolute; top: 15px; right: 15px; display: flex; flex-direction: column; gap: 5px; }
+  .killfeed-item { background: rgba(0,0,0,0.7); padding: 5px 12px; border-radius: 4px; font-size: .85rem; border-left: 3px solid #e74c3c; animation: fadeIn .3s; }
   .killfeed-item .killer { color: #4a9eff; font-weight: 600; }
   .killfeed-item .victim { color: #e74c3c; font-weight: 600; }
   @keyframes fadeIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-
-  .ping-display {
-    position: absolute; top: 15px; left: 15px; font-size: .8rem;
-    background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 4px; color: #aaa;
-  }
+  .ping-display { position: absolute; top: 15px; left: 15px; font-size: .8rem; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 4px; color: #aaa; }
   .ping-display .val { color: #2ecc71; font-weight: 600; }
   .ping-display .val.bad { color: #e74c3c; }
-
-  /* Scoreboard */
-  #scoreboard {
-    position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
-    z-index: 60; background: rgba(0,0,0,0.7);
-  }
+  #scoreboard { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 60; background: rgba(0,0,0,0.7); }
   #scoreboard.show { display: flex; }
-  .scoreboard-box {
-    width: 500px; background: #1a1a2e; border-radius: 12px; padding: 25px;
-    border: 1px solid #333;
-  }
+  .scoreboard-box { width: 500px; background: #1a1a2e; border-radius: 12px; padding: 25px; border: 1px solid #333; }
   .scoreboard-box h3 { text-align: center; margin-bottom: 15px; color: #4a9eff; }
   .scoreboard-table { width: 100%; border-collapse: collapse; }
   .scoreboard-table th { text-align: left; padding: 8px; color: #888; font-size: .85rem; border-bottom: 1px solid #333; }
   .scoreboard-table td { padding: 8px; border-bottom: 1px solid #222; }
   .scoreboard-table tr.me { background: rgba(74,158,255,0.1); }
-
-  /* Death screen */
-  #death-screen {
-    position: fixed; inset: 0; display: none; flex-direction: column;
-    align-items: center; justify-content: center; z-index: 70;
-    background: rgba(100,0,0,0.5);
-  }
+  #death-screen { position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 70; background: rgba(100,0,0,0.5); }
   #death-screen.show { display: flex; }
   #death-screen h2 { font-size: 3rem; color: #e74c3c; margin-bottom: 10px; text-shadow: 0 0 20px #000; }
   #death-screen p { font-size: 1.2rem; color: #ccc; margin-bottom: 20px; }
   #death-screen .respawn-timer { font-size: 1.5rem; color: #4a9eff; }
-
-  /* Menu overlay (ESC) */
-  #esc-menu {
-    position: fixed; inset: 0; display: none; flex-direction: column;
-    align-items: center; justify-content: center; z-index: 65;
-    background: rgba(0,0,0,0.8);
-  }
+  #esc-menu { position: fixed; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 65; background: rgba(0,0,0,0.8); }
   #esc-menu.show { display: flex; }
-
-  /* Hit marker */
-  .hit-marker {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-    width: 30px; height: 30px; pointer-events: none;
-  }
-  .hit-marker::before, .hit-marker::after {
-    content: ''; position: absolute; background: #fff; width: 14px; height: 2px;
-  }
-  .hit-marker::before { top: 5px; left: -2px; transform: rotate(45deg); }
-  .hit-marker::after { top: 5px; right: -2px; transform: rotate(-45deg); }
-
-  .name-tag {
-    position: absolute; pointer-events: none; z-index: 40;
-    transform: translate(-50%, -50%); font-size: .8rem; font-weight: 600;
-    text-shadow: 0 0 4px #000, 0 0 4px #000; white-space: nowrap;
-  }
+  .name-tag { position: absolute; pointer-events: none; z-index: 40; transform: translate(-50%, -50%); font-size: .8rem; font-weight: 600; text-shadow: 0 0 4px #000, 0 0 4px #000; white-space: nowrap; }
 </style>
 </head>
 <body>
 
-<!-- ============ CONNECT SCREEN ============ -->
 <div id="connect-screen" class="screen">
   <div class="connect-box">
     <h1>⚡ FPS ARENA</h1>
@@ -190,13 +87,9 @@
     <input type="text" id="name-input" placeholder="Enter your name" maxlength="16" value="">
     <br><br>
     <button class="btn" id="connect-btn" onclick="doConnect()">CONNECT</button>
-    <p style="margin-top:20px;font-size:.8rem;color:#555;">
-      Server: <span id="server-url-display"></span>
-    </p>
   </div>
 </div>
 
-<!-- ============ LOBBY SCREEN ============ -->
 <div id="lobby-screen" class="screen hidden">
   <div class="lobby-box">
     <h2>⚔️ LOBBY</h2>
@@ -208,79 +101,55 @@
       </select>
       <input type="text" id="room-name-input" placeholder="Room name" maxlength="24" style="flex:1">
       <button class="btn" onclick="createRoom()">Create Room</button>
-      <button class="btn secondary" onclick="refreshLobby()">Refresh</button>
     </div>
-    <div class="room-list" id="room-list">
-      <div class="empty-state">No rooms yet. Create one!</div>
-    </div>
-    <div style="text-align:center;margin-top:15px;">
-      <button class="btn danger" onclick="disconnect()">Disconnect</button>
-    </div>
+    <div class="room-list" id="room-list"><div class="empty-state">No rooms yet. Create one!</div></div>
+    <div style="text-align:center;margin-top:15px;"><button class="btn danger" onclick="disconnect()">Disconnect</button></div>
   </div>
 </div>
 
-<!-- ============ ROOM WAITING SCREEN ============ -->
 <div id="room-screen" class="screen hidden">
   <div class="room-box">
     <h2 id="room-title">Room</h2>
     <p class="map-name" id="room-map-name"></p>
     <div class="player-list" id="room-player-list"></div>
-    <p style="color:#888;font-size:.85rem;margin-bottom:15px;">
-      You can start playing immediately. Others can join anytime.
-    </p>
     <button class="btn" onclick="startGame()">▶ Enter Game</button>
     <button class="btn danger" onclick="leaveRoom()">Leave Room</button>
   </div>
 </div>
 
-<!-- ============ GAME CANVAS ============ -->
 <canvas id="game-canvas"></canvas>
 
-<!-- ============ HUD ============ -->
 <div id="hud" class="hidden">
   <div class="crosshair"><div class="dot"></div></div>
-
   <div class="health-bar">
     <div class="label">HEALTH</div>
-    <div class="bar-bg">
-      <div class="bar-fill" id="health-fill"></div>
-    </div>
+    <div class="bar-bg"><div class="bar-fill" id="health-fill"></div></div>
     <div class="bar-text" id="health-text">100</div>
   </div>
-
   <div class="ammo-display">
     <div class="weapon">RIFLE</div>
     <div class="count" id="ammo-count">30</div>
   </div>
-
   <div class="killfeed" id="killfeed"></div>
-
-  <div class="ping-display">
-    PING: <span class="val" id="ping-val">--</span>ms
-  </div>
+  <div class="ping-display">PING: <span class="val" id="ping-val">--</span>ms</div>
 </div>
 
-<!-- ============ SCOREBOARD ============ -->
 <div id="scoreboard">
   <div class="scoreboard-box">
     <h3 id="sb-room-name">Scoreboard</h3>
     <table class="scoreboard-table">
-      <thead>
-        <tr><th>#</th><th>Player</th><th>Kills</th><th>Deaths</th><th>K/D</th></tr>
-      </thead>
+      <thead><tr><th>#</th><th>Player</th><th>Kills</th><th>Deaths</th><th>K/D</th></tr></thead>
       <tbody id="sb-body"></tbody>
     </table>
   </div>
 </div>
 
-<!-- ============ DEATH SCREEN ============ -->
 <div id="death-screen">
   <h2>YOU DIED</h2>
   <p id="death-killer">Killed by ...</p>
   <p class="respawn-timer" id="respawn-timer">Respawning in 3...</p>
 </div>
 
-<!-- ============ ESC MENU ============ -->
 <div id="esc-menu">
   <h2 style="color:#4a9eff;margin-bottom:20px;">PAUSED</h2>
   <button class="btn" onclick="closeEscMenu()">Resume</button>
@@ -288,534 +157,234 @@
 </div>
 
 <script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
-  }
-}
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
 </script>
 
 <script type="module">
 import * as THREE from 'three';
 
-// ============================================================
-//  CONFIGURATION
-// ============================================================
+// Tự động dùng wss:// nếu trên HTTPS (Railway, Heroku...)
 const SERVER_URL = `${location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}`;
-document.getElementById('server-url-display').textContent = SERVER_URL;
-
-const INPUT_SEND_INTERVAL = 50; // ms — send input at 20Hz
-const INTERP_DELAY = 0.1; // seconds — buffer for interpolation
+const INPUT_SEND_INTERVAL = 50;
 const MAX_AMMO = 30;
-const RELOAD_TIME = 1500; // ms
+const RELOAD_TIME = 1500;
 
-// ============================================================
-//  STATE
-// ============================================================
-let ws = null;
-let myId = null;
-let myName = '';
-let currentRoom = null;
-let currentMapId = null;
-let mapData = null;
-let inGame = false;
-
-// Three.js
+let ws = null, myId = null, myName = '', currentRoom = null, currentMapId = null, mapData = null, inGame = false;
 let scene, camera, renderer;
-let myLight;
-const otherPlayerMeshes = new Map(); // id -> { group, body, nameTag, lastPos, targetPos, lastRot, targetRot, lastUpdate }
+let gunGroup; // Mô hình súng góc nhìn thứ 1
+let muzzleFlashLight; // Đèn nhấp nháy khi bắn
+const otherPlayerMeshes = new Map();
 
-// My player state (client-side prediction)
 const myState = {
-  position: new THREE.Vector3(0, 1.7, 0),
-  velocityY: 0,
-  yaw: 0, pitch: 0,
-  health: 100, alive: true,
-  kills: 0, deaths: 0,
-  ammo: MAX_AMMO, reloading: false,
-  onGround: true,
+  position: new THREE.Vector3(0, 1.7, 0), velocityY: 0, yaw: 0, pitch: 0,
+  health: 100, alive: true, kills: 0, deaths: 0,
+  ammo: MAX_AMMO, reloading: false, onGround: true
 };
-
-// Server state for reconciliation
 let lastServerState = null;
+const keys = {}; let mouseLocked = false, escMenuOpen = false, lastShootTime = 0, lastInputSent = 0, lastPingSent = 0, ping = 0;
+const nameTagElements = new Map();
 
-// Input
-const keys = {};
-let mouseLocked = false;
-let escMenuOpen = false;
-let lastShootTime = 0;
-let lastInputSent = 0;
-let lastPingSent = 0;
-let ping = 0;
-
-// Name tags (HTML overlay)
-const nameTagElements = new Map(); // id -> div element
-
-// ============================================================
-//  WEBSOCKET CONNECTION
-// ============================================================
 function connect(name) {
   ws = new WebSocket(SERVER_URL);
-
-  ws.onopen = () => {
-    console.log('[WS] Connected');
-    send({ type: 'join', payload: { name } });
-    // Start ping loop
-    setInterval(sendPing, 2000);
-  };
-
-  ws.onmessage = (e) => {
-    let msg;
-    try { msg = JSON.parse(e.data); } catch { return; }
-    handleMessage(msg);
-  };
-
-  ws.onclose = () => {
-    console.log('[WS] Disconnected');
-    showScreen('connect');
-    inGame = false;
-    if (mouseLocked) document.exitPointerLock();
-  };
-
-  ws.onerror = (e) => {
-    console.error('[WS] Error', e);
-    alert('Cannot connect to server. Make sure server.js is running.\nStart it with: node server.js');
-  };
+  ws.onopen = () => { send({ type: 'join', payload: { name } }); setInterval(sendPing, 2000); };
+  ws.onmessage = (e) => { let msg; try { msg = JSON.parse(e.data); } catch { return; } handleMessage(msg); };
+  ws.onclose = () => { showScreen('connect'); inGame = false; if (mouseLocked) document.exitPointerLock(); };
+  ws.onerror = () => { alert('Cannot connect to server. Make sure server.js is running.'); };
 }
+function send(msg) { if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(msg)); }
+function sendPing() { if (!ws || ws.readyState !== WebSocket.OPEN) return; lastPingSent = performance.now(); send({ type: 'ping', payload: { t: lastPingSent } }); }
 
-function send(msg) {
-  if (ws && ws.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify(msg));
-  }
-}
-
-function sendPing() {
-  if (!ws || ws.readyState !== WebSocket.OPEN) return;
-  lastPingSent = performance.now();
-  send({ type: 'ping', payload: { t: lastPingSent } });
-}
-
-// ============================================================
-//  MESSAGE HANDLER
-// ============================================================
 function handleMessage(msg) {
   switch (msg.type) {
-
-    case 'lobby_state': {
-      if (!inGame) {
-        renderRoomList(msg.payload.rooms);
-      }
-      break;
-    }
-
-    case 'room_joined': {
-      myId = msg.payload.yourId;
-      currentRoom = { id: msg.payload.roomId, name: msg.payload.roomName, mapId: msg.payload.mapId };
-      currentMapId = msg.payload.mapId;
-      mapData = msg.payload.mapData;
-
+    case 'lobby_state': if (!inGame) renderRoomList(msg.payload.rooms); break;
+    case 'room_joined':
+      myId = msg.payload.yourId; currentRoom = { id: msg.payload.roomId, name: msg.payload.roomName, mapId: msg.payload.mapId };
+      currentMapId = msg.payload.mapId; mapData = msg.payload.mapData;
       document.getElementById('room-title').textContent = currentRoom.name;
       document.getElementById('room-map-name').textContent = `📍 ${mapData.name}`;
-      renderRoomPlayers(msg.payload.players);
-      showScreen('room');
-      break;
-    }
-
-    case 'player_joined': {
-      if (currentRoom) {
-        // Add to room player list
-        // We'll get full list via game_state once in game
-        console.log(`[ROOM] ${msg.payload.name} joined`);
-      }
-      break;
-    }
-
-    case 'player_left': {
+      renderRoomPlayers(msg.payload.players); showScreen('room'); break;
+    case 'player_left':
       const id = msg.payload.id;
-      if (otherPlayerMeshes.has(id)) {
-        const obj = otherPlayerMeshes.get(id);
-        scene.remove(obj.group);
-        otherPlayerMeshes.delete(id);
-      }
-      if (nameTagElements.has(id)) {
-        nameTagElements.get(id).remove();
-        nameTagElements.delete(id);
-      }
+      if (otherPlayerMeshes.has(id)) { scene.remove(otherPlayerMeshes.get(id).group); otherPlayerMeshes.delete(id); }
+      if (nameTagElements.has(id)) { nameTagElements.get(id).remove(); nameTagElements.delete(id); }
       break;
-    }
-
-    case 'game_state': {
-      lastServerState = msg.payload;
-      updateFromServerState(msg.payload);
+    case 'game_state': lastServerState = msg.payload; updateFromServerState(msg.payload); break;
+    case 'hit':
+      if (msg.payload.shooterId === myId) showHitMarker();
+      if (msg.payload.targetId === myId) { myState.health = msg.payload.targetHealth; flashDamage(); }
       break;
-    }
-
-    case 'hit': {
-      // Show hit marker if I'm the shooter
-      if (msg.payload.shooterId === myId) {
-        showHitMarker();
-      }
-      // Update health bar if I'm the target
-      if (msg.payload.targetId === myId) {
-        myState.health = msg.payload.targetHealth;
-        flashDamage();
-      }
-      break;
-    }
-
-    case 'kill': {
+    case 'kill':
       addKillFeed(msg.payload.killerName, msg.payload.victimName);
-      if (msg.payload.victimId === myId) {
-        showDeathScreen(msg.payload.killerName);
-      }
-      break;
-    }
-
-    case 'spawn': {
+      if (msg.payload.victimId === myId) showDeathScreen(msg.payload.killerName); break;
+    case 'spawn':
       if (msg.payload.playerId === myId) {
         myState.position.set(msg.payload.position.x, msg.payload.position.y, msg.payload.position.z);
-        myState.velocityY = 0;
-        myState.health = 100;
-        myState.alive = true;
-        myState.ammo = MAX_AMMO;
-        hideDeathScreen();
-      }
-      break;
-    }
-
-    case 'pong': {
+        myState.velocityY = 0; myState.health = 100; myState.alive = true; myState.ammo = MAX_AMMO; hideDeathScreen();
+      } break;
+    case 'pong':
       ping = Math.round(performance.now() - msg.payload.t);
-      const el = document.getElementById('ping-val');
-      el.textContent = ping;
-      el.classList.toggle('bad', ping > 150);
-      break;
-    }
-
-    case 'error': {
-      alert(msg.payload.message);
-      break;
-    }
+      const el = document.getElementById('ping-val'); el.textContent = ping; el.classList.toggle('bad', ping > 150); break;
+    case 'error': alert(msg.payload.message); break;
   }
 }
 
-// ============================================================
-//  SCREEN MANAGEMENT
-// ============================================================
 function showScreen(name) {
-  ['connect', 'lobby', 'room'].forEach(s => {
-    document.getElementById(s + '-screen').classList.toggle('hidden', s !== name);
-  });
+  ['connect', 'lobby', 'room'].forEach(s => document.getElementById(s + '-screen').classList.toggle('hidden', s !== name));
   document.getElementById('hud').classList.toggle('hidden', name !== 'game' && !inGame);
 }
-
 function doConnect() {
-  const name = document.getElementById('name-input').value.trim() || 'Player';
-  myName = name;
-  connect(name);
-  // Wait for lobby_state to show lobby
-  setTimeout(() => {
-    if (ws && ws.readyState === WebSocket.OPEN) {
-      showScreen('lobby');
-    }
-  }, 500);
+  const name = document.getElementById('name-input').value.trim() || 'Player'; myName = name; connect(name);
+  setTimeout(() => { if (ws && ws.readyState === WebSocket.OPEN) showScreen('lobby'); }, 500);
 }
-
-function disconnect() {
-  if (ws) ws.close();
-}
-
-function refreshLobby() {
-  send({ type: 'leave_room', payload: {} });
-}
-
-function createRoom() {
-  const mapId = document.getElementById('map-select').value;
-  const roomName = document.getElementById('room-name-input').value.trim() || `${myName}'s Room`;
-  send({ type: 'create_room', payload: { roomName, mapId } });
-}
-
-function joinRoom(roomId) {
-  send({ type: 'join_room', payload: { roomId } });
-}
-
-function leaveRoom() {
-  send({ type: 'leave_room', payload: {} });
-  cleanupGame();
-  showScreen('lobby');
-}
-
+function disconnect() { if (ws) ws.close(); }
+function createRoom() { const mapId = document.getElementById('map-select').value; const roomName = document.getElementById('room-name-input').value.trim() || `${myName}'s Room`; send({ type: 'create_room', payload: { roomName, mapId } }); }
+function joinRoom(roomId) { send({ type: 'join_room', payload: { roomId } }); }
+function leaveRoom() { send({ type: 'leave_room', payload: {} }); cleanupGame(); showScreen('lobby'); }
 function renderRoomList(rooms) {
   const list = document.getElementById('room-list');
-  if (!rooms || rooms.length === 0) {
-    list.innerHTML = '<div class="empty-state">No rooms yet. Create one!</div>';
-    return;
-  }
-  list.innerHTML = rooms.map(r => `
-    <div class="room-item">
-      <div>
-        <div class="room-name">${escapeHtml(r.name)}</div>
-        <div class="room-map">📍 ${escapeHtml(r.mapName)}</div>
-      </div>
-      <div class="room-players">${r.playerCount}/${r.maxPlayers}</div>
-      <button class="btn" onclick="joinRoom(${r.id})" ${r.playerCount >= r.maxPlayers ? 'disabled' : ''}>Join</button>
-    </div>
-  `).join('');
+  if (!rooms || rooms.length === 0) { list.innerHTML = '<div class="empty-state">No rooms yet. Create one!</div>'; return; }
+  list.innerHTML = rooms.map(r => `<div class="room-item"><div><div class="room-name">${escapeHtml(r.name)}</div><div class="room-map">📍 ${escapeHtml(r.mapName)}</div></div><div class="room-players">${r.playerCount}/${r.maxPlayers}</div><button class="btn" onclick="joinRoom(${r.id})" ${r.playerCount >= r.maxPlayers ? 'disabled' : ''}>Join</button></div>`).join('');
 }
-
 function renderRoomPlayers(players) {
   const list = document.getElementById('room-player-list');
-  list.innerHTML = players.map(p => `
-    <div class="player-chip">
-      <div class="dot" style="background:#${(p.color || 0xffffff).toString(16).padStart(6,'0')}"></div>
-      ${escapeHtml(p.name)}${p.id === myId ? ' (You)' : ''}
-    </div>
-  `).join('');
+  list.innerHTML = players.map(p => `<div class="player-chip"><div class="dot" style="background:#${(p.color || 0xffffff).toString(16).padStart(6,'0')}"></div>${escapeHtml(p.name)}${p.id === myId ? ' (You)' : ''}</div>`).join('');
 }
+function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
-function escapeHtml(s) {
-  const d = document.createElement('div');
-  d.textContent = s;
-  return d.innerHTML;
-}
-
-// ============================================================
-//  GAME INITIALIZATION
-// ============================================================
 function startGame() {
-  showScreen('game');
-  document.getElementById('hud').classList.remove('hidden');
-  initThree();
-  inGame = true;
-  setupInputListeners();
-  animate();
-  // Request pointer lock
-  requestPointerLock();
+  showScreen('game'); document.getElementById('hud').classList.remove('hidden');
+  initThree(); inGame = true; setupInputListeners(); animate(); requestPointerLock();
 }
-
 function cleanupGame() {
-  inGame = false;
-  if (mouseLocked) document.exitPointerLock();
-  // Remove all other player meshes
-  for (const [id, obj] of otherPlayerMeshes) {
-    scene.remove(obj.group);
-  }
+  inGame = false; if (mouseLocked) document.exitPointerLock();
+  for (const [id, obj] of otherPlayerMeshes) scene.remove(obj.group);
   otherPlayerMeshes.clear();
-  for (const [id, el] of nameTagElements) {
-    el.remove();
-  }
-  nameTagElements.clear();
-  document.getElementById('hud').classList.add('hidden');
-  hideDeathScreen();
-  closeEscMenu();
+  for (const [id, el] of nameTagElements) el.remove(); nameTagElements.clear();
+  document.getElementById('hud').classList.add('hidden'); hideDeathScreen(); closeEscMenu();
 }
 
 function initThree() {
-  if (renderer) return; // already initialized
-
+  if (renderer) return;
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(mapData.skyColor || 0x1a1a2e);
-  scene.fog = new THREE.Fog(mapData.skyColor || 0x1a1a2e, 30, 80);
+  scene.background = new THREE.Color(mapData.skyColor || 0x87CEEB);
+  scene.fog = new THREE.Fog(mapData.skyColor || 0x87CEEB, 50, 150); // Sương mù mờ xa, trời sáng
 
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 200);
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
+  scene.add(camera); // Bắt buộc thêm camera vào scene để thấy súng gắn vào camera
 
-  renderer = new THREE.WebGLRenderer({
-    canvas: document.getElementById('game-canvas'),
-    antialias: true,
-  });
+  renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('game-canvas'), antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-  // Lighting
-  const ambient = new THREE.AmbientLight(0xffffff, 0.5);
-  scene.add(ambient);
+  // Ánh sáng ban ngày
+  const ambient = new THREE.AmbientLight(0xffffff, 0.8); scene.add(ambient);
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
+  dirLight.position.set(30, 50, 20); dirLight.castShadow = true;
+  dirLight.shadow.mapSize.width = 2048; dirLight.shadow.mapSize.height = 2048;
+  dirLight.shadow.camera.left = -60; dirLight.shadow.camera.right = 60;
+  dirLight.shadow.camera.top = 60; dirLight.shadow.camera.bottom = -60;
+  dirLight.shadow.camera.far = 150; scene.add(dirLight);
 
-  const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  dirLight.position.set(20, 40, 20);
-  dirLight.castShadow = true;
-  dirLight.shadow.mapSize.width = 2048;
-  dirLight.shadow.mapSize.height = 2048;
-  dirLight.shadow.camera.left = -50;
-  dirLight.shadow.camera.right = 50;
-  dirLight.shadow.camera.top = 50;
-  dirLight.shadow.camera.bottom = -50;
-  dirLight.shadow.camera.far = 100;
-  scene.add(dirLight);
+  buildMap(); buildFirstPersonGun();
 
-  // Build map
-  buildMap();
-
-  // Resize handler
   window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+    camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 }
 
 function buildMap() {
-  // Floor
   const floorGeo = new THREE.PlaneGeometry(mapData.size.width, mapData.size.depth);
-  const floorMat = new THREE.MeshStandardMaterial({ color: mapData.floorColor || 0x333333, roughness: 0.9 });
-  const floor = new THREE.Mesh(floorGeo, floorMat);
-  floor.rotation.x = -Math.PI / 2;
-  floor.receiveShadow = true;
-  scene.add(floor);
-
-  // Grid helper for visual reference
-  const grid = new THREE.GridHelper(mapData.size.width, 25, 0x444444, 0x222222);
-  grid.position.y = 0.01;
-  scene.add(grid);
-
-  // Obstacles
+  const floorMat = new THREE.MeshStandardMaterial({ color: mapData.floorColor || 0x888888, roughness: 0.9 });
+  const floor = new THREE.Mesh(floorGeo, floorMat); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+  const grid = new THREE.GridHelper(mapData.size.width, 25, 0x444444, 0x222222); grid.position.y = 0.01; scene.add(grid);
   for (const obs of mapData.obstacles) {
-    const [x, y, z] = obs.pos;
-    const [w, h, d] = obs.size;
+    const [x, y, z] = obs.pos; const [w, h, d] = obs.size;
     const geo = new THREE.BoxGeometry(w, h, d);
-    const mat = new THREE.MeshStandardMaterial({
-      color: obs.color || mapData.wallColor || 0x555555,
-      roughness: 0.7,
-      metalness: 0.1,
-    });
-    const mesh = new THREE.Mesh(geo, mat);
-    mesh.position.set(x, y, z);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    scene.add(mesh);
+    const mat = new THREE.MeshStandardMaterial({ color: obs.color || mapData.wallColor || 0xAAAAAA, roughness: 0.7, metalness: 0.1 });
+    const mesh = new THREE.Mesh(geo, mat); mesh.position.set(x, y, z); mesh.castShadow = true; mesh.receiveShadow = true; scene.add(mesh);
   }
 }
 
-// ============================================================
-//  OTHER PLAYER MESHES
-// ============================================================
+// Khởi tạo súng góc nhìn thứ nhất
+function buildFirstPersonGun() {
+  gunGroup = new THREE.Group();
+  const gunMat = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.6, metalness: 0.5 });
+  const body = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, 0.5), gunMat); gunGroup.add(body);
+  const barrel = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, 0.4), gunMat); barrel.position.set(0, 0, -0.4); gunGroup.add(barrel);
+  const mag = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.2, 0.1), gunMat); mag.position.set(0, -0.15, 0); gunGroup.add(mag);
+  const handle = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.2, 0.1), gunMat); handle.position.set(0, -0.15, 0.1); gunGroup.add(handle);
+  
+  muzzleFlashLight = new THREE.PointLight(0xffaa00, 0, 5); muzzleFlashLight.position.set(0, 0, -0.6); gunGroup.add(muzzleFlashLight);
+  
+  gunGroup.position.set(0.3, -0.3, -0.5); // Vị trí tay phải
+  camera.add(gunGroup);
+}
+
+// Tạo mô hình 3D cho người chơi khác (hình người)
 function createPlayerMesh(color, name) {
   const group = new THREE.Group();
+  const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.5, metalness: 0.2 });
+  const darkMat = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.8 });
 
-  // Body (capsule-like using cylinder + sphere)
-  const bodyMat = new THREE.MeshStandardMaterial({ color, roughness: 0.5, metalness: 0.2 });
-  const bodyGeo = new THREE.CapsuleGeometry(0.35, 0.9, 4, 8);
-  const body = new THREE.Mesh(bodyGeo, bodyMat);
-  body.position.y = 0;
-  body.castShadow = true;
-  group.add(body);
+  // Thân
+  const torso = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.8, 0.4), mat);
+  torso.position.y = -0.5; torso.castShadow = true; group.add(torso);
+  // Đầu
+  const head = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.4, 0.4), new THREE.MeshStandardMaterial({color: 0xffdbac}));
+  head.position.y = 0.1; head.castShadow = true; group.add(head);
+  // Tay
+  const armGeo = new THREE.BoxGeometry(0.2, 0.7, 0.2);
+  const leftArm = new THREE.Mesh(armGeo, mat); leftArm.position.set(-0.4, -0.5, 0); leftArm.castShadow = true; group.add(leftArm);
+  const rightArm = new THREE.Mesh(armGeo, mat); rightArm.position.set(0.4, -0.5, 0); rightArm.castShadow = true; group.add(rightArm);
+  // Chân
+  const legGeo = new THREE.BoxGeometry(0.25, 0.8, 0.25);
+  const leftLeg = new THREE.Mesh(legGeo, darkMat); leftLeg.position.set(-0.15, -1.3, 0); leftLeg.castShadow = true; group.add(leftLeg);
+  const rightLeg = new THREE.Mesh(legGeo, darkMat); rightLeg.position.set(0.15, -1.3, 0); rightLeg.castShadow = true; group.add(rightLeg);
+  // Súng nhỏ trên tay người chơi khác
+  const gunMat = new THREE.MeshStandardMaterial({color: 0x111111});
+  const enemyGun = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.15, 0.5), gunMat); enemyGun.position.set(0.4, -0.4, -0.3); group.add(enemyGun);
 
-  // Head
-  const headGeo = new THREE.SphereGeometry(0.25, 12, 10);
-  const headMat = new THREE.MeshStandardMaterial({ color: 0xffdbac, roughness: 0.6 });
-  const head = new THREE.Mesh(headGeo, headMat);
-  head.position.y = 0.75;
-  head.castShadow = true;
-  group.add(head);
-
-  // Direction indicator (a small box pointing forward)
-  const dirGeo = new THREE.BoxGeometry(0.15, 0.15, 0.4);
-  const dirMat = new THREE.MeshStandardMaterial({ color: 0xffff00, emissive: 0x444400 });
-  const dir = new THREE.Mesh(dirGeo, dirMat);
-  dir.position.set(0, 0.2, -0.4);
-  group.add(dir);
-
-  // Name tag (HTML element)
-  const tagEl = document.createElement('div');
-  tagEl.className = 'name-tag';
-  tagEl.textContent = name;
-  tagEl.style.color = '#' + color.toString(16).padStart(6, '0');
-  document.body.appendChild(tagEl);
-
-  return { group, body, head, tagEl };
+  const tagEl = document.createElement('div'); tagEl.className = 'name-tag'; tagEl.textContent = name;
+  tagEl.style.color = '#' + color.toString(16).padStart(6, '0'); document.body.appendChild(tagEl);
+  return { group, tagEl };
 }
 
 function updateOtherPlayers(players) {
   const seenIds = new Set();
-
   for (const p of players) {
-    if (p.id === myId) {
-      // Update my state from server (reconciliation)
-      continue;
-    }
-    seenIds.add(p.id);
-
-    let obj = otherPlayerMeshes.get(p.id);
+    if (p.id === myId) continue;
+    seenIds.add(p.id); let obj = otherPlayerMeshes.get(p.id);
     if (!obj) {
-      obj = createPlayerMesh(p.color, p.name);
-      scene.add(obj.group);
-      otherPlayerMeshes.set(p.id, obj);
-      nameTagElements.set(p.id, obj.tagEl);
-
-      // Initialize interpolation
-      obj.lastPos = new THREE.Vector3(p.x, p.y, p.z);
-      obj.targetPos = new THREE.Vector3(p.x, p.y, p.z);
-      obj.lastRot = p.yaw;
-      obj.targetRot = p.yaw;
-      obj.lastUpdate = performance.now() / 1000;
+      obj = createPlayerMesh(p.color, p.name); scene.add(obj.group);
+      otherPlayerMeshes.set(p.id, obj); nameTagElements.set(p.id, obj.tagEl);
+      obj.lastPos = new THREE.Vector3(p.x, p.y, p.z); obj.targetPos = new THREE.Vector3(p.x, p.y, p.z);
+      obj.lastRot = p.yaw; obj.targetRot = p.yaw; obj.lastUpdate = performance.now() / 1000;
     }
-
-    // Update interpolation targets
-    obj.lastPos.copy(obj.targetPos);
-    obj.targetPos.set(p.x, p.y, p.z);
-    obj.lastRot = obj.targetRot;
-    obj.targetRot = p.yaw;
-    obj.lastUpdate = performance.now() / 1000;
-
-    // Update visibility based on alive state
-    obj.group.visible = p.alive;
-
-    // Update name tag
-    obj.tagEl.style.display = p.alive ? 'block' : 'none';
+    obj.lastPos.copy(obj.targetPos); obj.targetPos.set(p.x, p.y, p.z);
+    obj.lastRot = obj.targetRot; obj.targetRot = p.yaw; obj.lastUpdate = performance.now() / 1000;
+    obj.group.visible = p.alive; obj.tagEl.style.display = p.alive ? 'block' : 'none';
   }
-
-  // Remove players that left
   for (const [id, obj] of otherPlayerMeshes) {
-    if (!seenIds.has(id)) {
-      scene.remove(obj.group);
-      otherPlayerMeshes.delete(id);
-      if (nameTagElements.has(id)) {
-        nameTagElements.get(id).remove();
-        nameTagElements.delete(id);
-      }
-    }
+    if (!seenIds.has(id)) { scene.remove(obj.group); otherPlayerMeshes.delete(id); if (nameTagElements.has(id)) { nameTagElements.get(id).remove(); nameTagElements.delete(id); } }
   }
 }
 
-// ============================================================
-//  RECONCILIATION — Update my state from server
-// ============================================================
 function updateFromServerState(state) {
   if (!inGame) return;
-
-  // Find myself in the player list
   for (const p of state.players) {
     if (p.id === myId) {
-      // Reconcile: if predicted position is too far from server, snap
-      const serverPos = new THREE.Vector3(p.x, p.y, p.z);
-      const dist = myState.position.distanceTo(serverPos);
-      if (dist > 2.0) {
-        // Large desync — snap to server position
-        myState.position.copy(serverPos);
-      } else if (dist > 0.3) {
-        // Small desync — gently correct
-        myState.position.lerp(serverPos, 0.3);
-      }
-
-      // Update health, alive, kills, deaths from server (authoritative)
-      myState.health = p.health;
-      myState.alive = p.alive;
-      myState.kills = p.kills;
-      myState.deaths = p.deaths;
-      break;
+      const serverPos = new THREE.Vector3(p.x, p.y, p.z); const dist = myState.position.distanceTo(serverPos);
+      if (dist > 2.0) myState.position.copy(serverPos);
+      else if (dist > 0.3) myState.position.lerp(serverPos, 0.3);
+      myState.health = p.health; myState.alive = p.alive; myState.kills = p.kills; myState.deaths = p.deaths; break;
     }
   }
-
-  // Update other players
-  updateOtherPlayers(state.players);
-
-  // Update scoreboard data
-  window._latestPlayers = state.players;
+  updateOtherPlayers(state.players); window._latestPlayers = state.players;
 }
 
-// ============================================================
-//  INPUT HANDLING
-// ============================================================
 function setupInputListeners() {
   document.addEventListener('keydown', (e) => {
     keys[e.code] = true;
@@ -823,400 +392,184 @@ function setupInputListeners() {
     if (e.code === 'KeyR') reload();
     if (e.code === 'Escape') toggleEscMenu();
   });
-
-  document.addEventListener('keyup', (e) => {
-    keys[e.code] = false;
-    if (e.code === 'Tab') showScoreboard(false);
-  });
-
+  document.addEventListener('keyup', (e) => { keys[e.code] = false; if (e.code === 'Tab') showScoreboard(false); });
   document.addEventListener('mousemove', (e) => {
     if (!mouseLocked || !inGame || escMenuOpen) return;
-    const sensitivity = 0.0022;
-    myState.yaw -= e.movementX * sensitivity;
-    myState.pitch -= e.movementY * sensitivity;
+    const sensitivity = 0.0022; myState.yaw -= e.movementX * sensitivity; myState.pitch -= e.movementY * sensitivity;
     myState.pitch = Math.max(-Math.PI/2 + 0.01, Math.min(Math.PI/2 - 0.01, myState.pitch));
   });
-
-  document.addEventListener('mousedown', (e) => {
-    if (e.button === 0 && mouseLocked && inGame && !escMenuOpen) {
-      tryShoot();
-    }
-  });
-
+  document.addEventListener('mousedown', (e) => { if (e.button === 0 && mouseLocked && inGame && !escMenuOpen) tryShoot(); });
   document.addEventListener('pointerlockchange', () => {
     mouseLocked = (document.pointerLockElement === document.getElementById('game-canvas'));
     if (!mouseLocked && inGame && !escMenuOpen) {
-      // Pointer lock was lost (e.g. user pressed Esc)
-      // We'll show the esc menu
-      // Use a small timeout to avoid race with Esc keydown
-      setTimeout(() => {
-        if (!mouseLocked && inGame) {
-          escMenuOpen = true;
-          document.getElementById('esc-menu').classList.add('show');
-        }
-      }, 100);
+      setTimeout(() => { if (!mouseLocked && inGame) { escMenuOpen = true; document.getElementById('esc-menu').classList.add('show'); } }, 100);
     }
   });
 }
+function requestPointerLock() { document.getElementById('game-canvas').requestPointerLock(); }
+function toggleEscMenu() { if (!inGame) return; if (escMenuOpen) closeEscMenu(); else openEscMenu(); }
+function openEscMenu() { escMenuOpen = true; if (mouseLocked) document.exitPointerLock(); document.getElementById('esc-menu').classList.add('show'); }
+function closeEscMenu() { escMenuOpen = false; document.getElementById('esc-menu').classList.remove('show'); requestPointerLock(); }
+function leaveRoomFromGame() { document.getElementById('esc-menu').classList.remove('show'); escMenuOpen = false; cleanupGame(); leaveRoom(); }
 
-function requestPointerLock() {
-  document.getElementById('game-canvas').requestPointerLock();
-}
-
-function toggleEscMenu() {
-  if (!inGame) return;
-  if (escMenuOpen) closeEscMenu();
-  else openEscMenu();
-}
-
-function openEscMenu() {
-  escMenuOpen = true;
-  if (mouseLocked) document.exitPointerLock();
-  document.getElementById('esc-menu').classList.add('show');
-}
-
-function closeEscMenu() {
-  escMenuOpen = false;
-  document.getElementById('esc-menu').classList.remove('show');
-  requestPointerLock();
-}
-
-function leaveRoomFromGame() {
-  document.getElementById('esc-menu').classList.remove('show');
-  escMenuOpen = false;
-  cleanupGame();
-  leaveRoom();
-}
-
-// ============================================================
-//  SHOOTING
-// ============================================================
 function tryShoot() {
   if (!myState.alive || myState.reloading) return;
-  const now = Date.now();
-  if (now - lastShootTime < 100) return; // fire rate
+  const now = Date.now(); if (now - lastShootTime < 100) return;
   if (myState.ammo <= 0) { reload(); return; }
-
-  lastShootTime = now;
-  myState.ammo--;
-  updateAmmoDisplay();
-
-  // Send shoot event to server with current yaw/pitch
+  lastShootTime = now; myState.ammo--; updateAmmoDisplay();
   send({ type: 'shoot', payload: { yaw: myState.yaw, pitch: myState.pitch } });
-
-  // Show muzzle flash effect
-  showMuzzleFlash();
-
-  // Auto reload when empty
-  if (myState.ammo <= 0) {
-    setTimeout(reload, 200);
-  }
+  showMuzzleFlash(); // Hiệu ứng đèn nhấp nháy
+  if (myState.ammo <= 0) setTimeout(reload, 200);
 }
-
 function reload() {
   if (myState.reloading || myState.ammo === MAX_AMMO) return;
-  myState.reloading = true;
-  updateAmmoDisplay();
-  setTimeout(() => {
-    myState.ammo = MAX_AMMO;
-    myState.reloading = false;
-    updateAmmoDisplay();
-  }, RELOAD_TIME);
+  myState.reloading = true; updateAmmoDisplay();
+  setTimeout(() => { myState.ammo = MAX_AMMO; myState.reloading = false; updateAmmoDisplay(); }, RELOAD_TIME);
 }
+function updateAmmoDisplay() { const el = document.getElementById('ammo-count'); el.textContent = myState.reloading ? 'RELOADING...' : `${myState.ammo}/${MAX_AMMO}`; }
 
-function updateAmmoDisplay() {
-  const el = document.getElementById('ammo-count');
-  el.textContent = myState.reloading ? 'RELOADING...' : `${myState.ammo}/${MAX_AMMO}`;
-}
-
-// ============================================================
-//  EFFECTS
-// ============================================================
-let muzzleFlash = null;
 function showMuzzleFlash() {
-  // Brief screen flash effect on crosshair
-  const ch = document.querySelector('.crosshair');
-  ch.style.transform = 'translate(-50%,-50%) scale(1.3)';
+  if (muzzleFlashLight) {
+    muzzleFlashLight.intensity = 5;
+    setTimeout(() => { if(muzzleFlashLight) muzzleFlashLight.intensity = 0; }, 50);
+  }
+  const ch = document.querySelector('.crosshair'); ch.style.transform = 'translate(-50%,-50%) scale(1.3)';
   setTimeout(() => { ch.style.transform = 'translate(-50%,-50%) scale(1)'; }, 80);
 }
-
 let hitMarkerEl = null;
 function showHitMarker() {
-  if (hitMarkerEl) hitMarkerEl.remove();
-  hitMarkerEl = document.createElement('div');
-  hitMarkerEl.className = 'hit-marker';
-  hitMarkerEl.style.opacity = '1';
-  hitMarkerEl.style.transition = 'opacity 0.3s';
-  document.getElementById('hud').appendChild(hitMarkerEl);
+  if (hitMarkerEl) hitMarkerEl.remove(); hitMarkerEl = document.createElement('div'); hitMarkerEl.className = 'hit-marker';
+  hitMarkerEl.style.opacity = '1'; hitMarkerEl.style.transition = 'opacity 0.3s'; document.getElementById('hud').appendChild(hitMarkerEl);
   setTimeout(() => { hitMarkerEl.style.opacity = '0'; }, 200);
   setTimeout(() => { if (hitMarkerEl) { hitMarkerEl.remove(); hitMarkerEl = null; } }, 400);
 }
-
-function flashDamage() {
-  document.body.style.boxShadow = 'inset 0 0 100px rgba(255,0,0,0.5)';
-  setTimeout(() => { document.body.style.boxShadow = 'none'; }, 200);
-}
-
+function flashDamage() { document.body.style.boxShadow = 'inset 0 0 100px rgba(255,0,0,0.5)'; setTimeout(() => { document.body.style.boxShadow = 'none'; }, 200); }
 function addKillFeed(killer, victim) {
-  const feed = document.getElementById('killfeed');
-  const item = document.createElement('div');
-  item.className = 'killfeed-item';
-  item.innerHTML = `<span class="killer">${escapeHtml(killer)}</span>  ☠  <span class="victim">${escapeHtml(victim)}</span>`;
-  feed.appendChild(item);
+  const feed = document.getElementById('killfeed'); const item = document.createElement('div'); item.className = 'killfeed-item';
+  item.innerHTML = `<span class="killer">${escapeHtml(killer)}</span>  ☠  <span class="victim">${escapeHtml(victim)}</span>`; feed.appendChild(item);
   setTimeout(() => { item.style.opacity = '0'; item.style.transition = 'opacity 0.5s'; }, 4000);
-  setTimeout(() => item.remove(), 4600);
-  // Limit items
-  while (feed.children.length > 6) feed.removeChild(feed.firstChild);
+  setTimeout(() => item.remove(), 4600); while (feed.children.length > 6) feed.removeChild(feed.firstChild);
 }
-
 function showDeathScreen(killerName) {
-  document.getElementById('death-killer').textContent = `Killed by ${killerName}`;
-  document.getElementById('death-screen').classList.add('show');
-  let count = 3;
-  const timer = setInterval(() => {
-    count--;
-    document.getElementById('respawn-timer').textContent = `Respawning in ${count}...`;
-    if (count <= 0) clearInterval(timer);
-  }, 1000);
+  document.getElementById('death-killer').textContent = `Killed by ${killerName}`; document.getElementById('death-screen').classList.add('show');
+  let count = 3; const timer = setInterval(() => { count--; document.getElementById('respawn-timer').textContent = `Respawning in ${count}...`; if (count <= 0) clearInterval(timer); }, 1000);
 }
-
-function hideDeathScreen() {
-  document.getElementById('death-screen').classList.remove('show');
-}
-
-// ============================================================
-//  SCOREBOARD
-// ============================================================
+function hideDeathScreen() { document.getElementById('death-screen').classList.remove('show'); }
 function showScoreboard(show) {
-  const sb = document.getElementById('scoreboard');
-  if (!show) { sb.classList.remove('show'); return; }
-
-  const players = window._latestPlayers || [];
-  const sorted = [...players].sort((a, b) => b.kills - a.kills);
-  const body = document.getElementById('sb-body');
-  body.innerHTML = sorted.map((p, i) => {
-    const kd = p.deaths === 0 ? p.kills.toFixed(2) : (p.kills / p.deaths).toFixed(2);
-    return `<tr class="${p.id === myId ? 'me' : ''}">
-      <td>${i + 1}</td>
-      <td style="color:#${(p.color||0xffffff).toString(16).padStart(6,'0')}">${escapeHtml(p.name)}${p.id === myId ? ' (You)' : ''}</td>
-      <td>${p.kills}</td>
-      <td>${p.deaths}</td>
-      <td>${kd}</td>
-    </tr>`;
-  }).join('');
-
-  if (currentRoom) {
-    document.getElementById('sb-room-name').textContent = `📊 ${currentRoom.name}`;
-  }
-  sb.classList.add('show');
+  const sb = document.getElementById('scoreboard'); if (!show) { sb.classList.remove('show'); return; }
+  const players = window._latestPlayers || []; const sorted = [...players].sort((a, b) => b.kills - a.kills);
+  document.getElementById('sb-body').innerHTML = sorted.map((p, i) => `<tr class="${p.id === myId ? 'me' : ''}"><td>${i + 1}</td><td style="color:#${(p.color||0xffffff).toString(16).padStart(6,'0')}">${escapeHtml(p.name)}${p.id === myId ? ' (You)' : ''}</td><td>${p.kills}</td><td>${p.deaths}</td><td>${p.deaths === 0 ? p.kills.toFixed(2) : (p.kills / p.deaths).toFixed(2)}</td></tr>`).join('');
+  if (currentRoom) document.getElementById('sb-room-name').textContent = `📊 ${currentRoom.name}`; sb.classList.add('show');
 }
 
-// ============================================================
-//  GAME LOOP
-// ============================================================
 let lastFrameTime = performance.now();
-
 function animate() {
-  requestAnimationFrame(animate);
-  if (!inGame) return;
+  requestAnimationFrame(animate); if (!inGame) return;
+  const now = performance.now(); const dt = Math.min((now - lastFrameTime) / 1000, 0.05); lastFrameTime = now;
 
-  const now = performance.now();
-  const dt = Math.min((now - lastFrameTime) / 1000, 0.05);
-  lastFrameTime = now;
+  if (myState.alive) updateMyMovement(dt);
+  if (now - lastInputSent > INPUT_SEND_INTERVAL) { sendInput(); lastInputSent = now; }
 
-  // ---- Update my player (client-side prediction) ----
-  if (myState.alive) {
-    updateMyMovement(dt);
+  camera.position.copy(myState.position); camera.rotation.order = 'YXZ';
+  camera.rotation.y = myState.yaw; camera.rotation.x = myState.pitch;
+
+  // Xử lý animation súng (chạy, nạp đạn)
+  if (gunGroup) {
+    const isMoving = keys['KeyW'] || keys['KeyA'] || keys['KeyS'] || keys['KeyD'];
+    const isSprinting = (keys['ShiftLeft'] || keys['ShiftRight']) && isMoving;
+    
+    // Chạy nhanh: Góc nhìn (FOV) rộng ra, súng hạ xuống
+    const targetFov = isSprinting && myState.onGround ? 85 : 75;
+    camera.fov += (targetFov - camera.fov) * 0.1;
+    camera.updateProjectionMatrix();
+
+    if (myState.reloading) {
+      // Động tác nạp đạn: súng chúc xuống
+      gunGroup.rotation.x += (1.2 - gunGroup.rotation.x) * 0.2;
+    } else if (isSprinting) {
+      // Động tác chạy: súng đưa ra trước và thấp xuống
+      gunGroup.rotation.x += (0.3 - gunGroup.rotation.x) * 0.1;
+      gunGroup.position.z += (-0.7 - gunGroup.position.z) * 0.1;
+      gunGroup.position.y += (-0.5 - gunGroup.position.y) * 0.1;
+    } else {
+      // Trở về tư thế sẵn sàng bắn
+      gunGroup.rotation.x += (0 - gunGroup.rotation.x) * 0.1;
+      gunGroup.position.z += (-0.5 - gunGroup.position.z) * 0.1;
+      gunGroup.position.y += (-0.3 - gunGroup.position.y) * 0.1;
+    }
   }
 
-  // ---- Send input to server ----
-  if (now - lastInputSent > INPUT_SEND_INTERVAL) {
-    sendInput();
-    lastInputSent = now;
+  // Nội suy vị trí cho người chơi khác
+  const nowSec = performance.now() / 1000;
+  for (const [id, obj] of otherPlayerMeshes) {
+    const t = Math.min(1, (nowSec - obj.lastUpdate) / 0.1);
+    obj.group.position.lerpVectors(obj.lastPos, obj.targetPos, t);
+    let rotDiff = obj.targetRot - obj.lastRot;
+    while (rotDiff > Math.PI) rotDiff -= Math.PI * 2; while (rotDiff < -Math.PI) rotDiff += Math.PI * 2;
+    obj.group.rotation.y = obj.lastRot + rotDiff * t;
   }
 
-  // ---- Update camera ----
-  camera.position.copy(myState.position);
-  camera.rotation.order = 'YXZ';
-  camera.rotation.y = myState.yaw;
-  camera.rotation.x = myState.pitch;
+  // Cập nhật HTML Name Tag
+  const vec = new THREE.Vector3();
+  for (const [id, obj] of otherPlayerMeshes) {
+    if (!obj.group.visible) { obj.tagEl.style.display = 'none'; continue; }
+    vec.copy(obj.group.position); vec.y += 1.3; vec.project(camera);
+    if (vec.z > 1) { obj.tagEl.style.display = 'none'; continue; }
+    obj.tagEl.style.display = 'block';
+    obj.tagEl.style.left = ((vec.x * 0.5 + 0.5) * window.innerWidth) + 'px';
+    obj.tagEl.style.top = ((-vec.y * 0.5 + 0.5) * window.innerHeight) + 'px';
+    const dist = camera.position.distanceTo(obj.group.position);
+    obj.tagEl.style.opacity = Math.max(0, Math.min(1, 1 - (dist - 30) / 20));
+  }
 
-  // ---- Interpolate other players ----
-  interpolateOtherPlayers(dt);
+  // Cập nhật HUD
+  document.getElementById('health-fill').style.width = Math.max(0, myState.health) + '%';
+  document.getElementById('health-text').textContent = Math.ceil(Math.max(0, myState.health));
 
-  // ---- Update name tags ----
-  updateNameTags();
-
-  // ---- Update HUD ----
-  updateHUD();
-
-  // ---- Render ----
   renderer.render(scene, camera);
 }
 
 function updateMyMovement(dt) {
-  const speed = (keys['ShiftLeft'] || keys['ShiftRight']) ? 8 : 5;
-  const cosY = Math.cos(myState.yaw);
-  const sinY = Math.sin(myState.yaw);
-
+  const speed = (keys['ShiftLeft'] || keys['ShiftRight']) ? 9 : 5; // Tốc độ chạy Shift
+  const cosY = Math.cos(myState.yaw); const sinY = Math.sin(myState.yaw);
   let mx = 0, mz = 0;
-  if (keys['KeyW']) { mx -= sinY; mz -= cosY; }
-  if (keys['KeyS']) { mx += sinY; mz += cosY; }
-  if (keys['KeyD']) { mx += cosY; mz -= sinY; }
-  if (keys['KeyA']) { mx -= cosY; mz += sinY; }
+  if (keys['KeyW']) { mx -= sinY; mz -= cosY; } if (keys['KeyS']) { mx += sinY; mz += cosY; }
+  if (keys['KeyD']) { mx += cosY; mz -= sinY; } if (keys['KeyA']) { mx -= cosY; mz += sinY; }
+  const len = Math.hypot(mx, mz); if (len > 0) { mx = (mx / len) * speed * dt; mz = (mz / len) * speed * dt; }
 
-  const len = Math.hypot(mx, mz);
-  if (len > 0) {
-    mx = (mx / len) * speed * dt;
-    mz = (mz / len) * speed * dt;
-  }
+  const newX = myState.position.x + mx; if (!clientCollides(newX, myState.position.z)) myState.position.x = newX;
+  const newZ = myState.position.z + mz; if (!clientCollides(myState.position.x, newZ)) myState.position.z = newZ;
 
-  // Apply with simple collision (same logic as server)
-  const newX = myState.position.x + mx;
-  if (!clientCollides(newX, myState.position.z)) {
-    myState.position.x = newX;
-  }
-  const newZ = myState.position.z + mz;
-  if (!clientCollides(myState.position.x, newZ)) {
-    myState.position.z = newZ;
-  }
-
-  // Clamp to bounds
-  const hw = mapData.size.width / 2 - 0.5;
-  const hd = mapData.size.depth / 2 - 0.5;
+  const hw = mapData.size.width / 2 - 0.5; const hd = mapData.size.depth / 2 - 0.5;
   myState.position.x = Math.max(-hw, Math.min(hw, myState.position.x));
   myState.position.z = Math.max(-hd, Math.min(hd, myState.position.z));
 
-  // Jump / gravity
-  if (keys['Space'] && myState.onGround) {
-    myState.velocityY = 7;
-    myState.onGround = false;
-  }
-  myState.velocityY -= 20 * dt;
-  myState.position.y += myState.velocityY * dt;
-  if (myState.position.y < 1.7) {
-    myState.position.y = 1.7;
-    myState.velocityY = 0;
-    myState.onGround = true;
-  }
+  if (keys['Space'] && myState.onGround) { myState.velocityY = 7; myState.onGround = false; }
+  myState.velocityY -= 20 * dt; myState.position.y += myState.velocityY * dt;
+  if (myState.position.y < 1.7) { myState.position.y = 1.7; myState.velocityY = 0; myState.onGround = true; }
 }
-
 function clientCollides(x, z) {
   const radius = 0.4;
   for (const obs of mapData.obstacles) {
-    const [ox, , oz] = obs.pos;
-    const [ow, oh, od] = obs.size;
-    if (oh > 8) continue; // skip outer walls
-    const minX = ox - ow/2 - radius;
-    const maxX = ox + ow/2 + radius;
-    const minZ = oz - od/2 - radius;
-    const maxZ = oz + od/2 + radius;
-    if (x > minX && x < maxX && z > minZ && z < maxZ) return true;
+    const [ox, , oz] = obs.pos; const [ow, oh, od] = obs.size; if (oh > 8) continue;
+    if (x > ox - ow/2 - radius && x < ox + ow/2 + radius && z > oz - od/2 - radius && z < oz + od/2 + radius) return true;
   }
   return false;
 }
-
 function sendInput() {
-  const payload = {
-    f: !!keys['KeyW'], b: !!keys['KeyS'],
-    l: !!keys['KeyA'], r: !!keys['KeyD'],
-    jump: !!keys['Space'],
-    run: !!(keys['ShiftLeft'] || keys['ShiftRight']),
-    shoot: false, // shooting handled via 'shoot' event
-    yaw: myState.yaw, pitch: myState.pitch,
-  };
-  send({ type: 'player_input', payload });
+  send({ type: 'player_input', payload: {
+    f: !!keys['KeyW'], b: !!keys['KeyS'], l: !!keys['KeyA'], r: !!keys['KeyD'],
+    jump: !!keys['Space'], run: !!(keys['ShiftLeft'] || keys['ShiftRight']), shoot: false,
+    yaw: myState.yaw, pitch: myState.pitch
+  }});
 }
 
-// ============================================================
-//  INTERPOLATION — Smooth other players
-// ============================================================
-function interpolateOtherPlayers(dt) {
-  const now = performance.now() / 1000;
-  const RENDER_DELAY = 0.1; // 100ms behind server
-
-  for (const [id, obj] of otherPlayerMeshes) {
-    const timeSinceUpdate = now - obj.lastUpdate;
-    const t = Math.min(1, timeSinceUpdate / 0.1); // interpolate over 100ms
-
-    // Lerp position
-    obj.group.position.lerpVectors(obj.lastPos, obj.targetPos, t);
-
-    // Lerp rotation (yaw)
-    let rotDiff = obj.targetRot - obj.lastRot;
-    // Handle angle wrapping
-    while (rotDiff > Math.PI) rotDiff -= Math.PI * 2;
-    while (rotDiff < -Math.PI) rotDiff += Math.PI * 2;
-    obj.group.rotation.y = obj.lastRot + rotDiff * t;
-  }
-}
-
-// ============================================================
-//  NAME TAGS — Project 3D position to 2D screen
-// ============================================================
-function updateNameTags() {
-  const vec = new THREE.Vector3();
-  for (const [id, obj] of otherPlayerMeshes) {
-    if (!obj.group.visible) {
-      obj.tagEl.style.display = 'none';
-      continue;
-    }
-
-    // Position tag above player head
-    vec.copy(obj.group.position);
-    vec.y += 1.3;
-    vec.project(camera);
-
-    // Check if behind camera
-    if (vec.z > 1) {
-      obj.tagEl.style.display = 'none';
-      continue;
-    }
-
-    const x = (vec.x * 0.5 + 0.5) * window.innerWidth;
-    const y = (-vec.y * 0.5 + 0.5) * window.innerHeight;
-    obj.tagEl.style.display = 'block';
-    obj.tagEl.style.left = x + 'px';
-    obj.tagEl.style.top = y + 'px';
-
-    // Fade with distance
-    const dist = camera.position.distanceTo(obj.group.position);
-    const opacity = Math.max(0, Math.min(1, 1 - (dist - 30) / 20));
-    obj.tagEl.style.opacity = opacity;
-  }
-}
-
-// ============================================================
-//  HUD UPDATE
-// ============================================================
-function updateHUD() {
-  const healthPct = Math.max(0, myState.health);
-  document.getElementById('health-fill').style.width = healthPct + '%';
-  document.getElementById('health-text').textContent = Math.ceil(healthPct);
-}
-
-// ============================================================
-//  ENTRY POINT
-// ============================================================
-// Allow Enter key on name input
-document.getElementById('name-input').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') doConnect();
-});
+document.getElementById('name-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') doConnect(); });
 document.getElementById('name-input').focus();
 
-// Expose functions to global scope for onclick handlers
-window.doConnect = doConnect;
-window.disconnect = disconnect;
-window.refreshLobby = refreshLobby;
-window.createRoom = createRoom;
-window.joinRoom = joinRoom;
-window.leaveRoom = leaveRoom;
-window.startGame = startGame;
-window.closeEscMenu = closeEscMenu;
-window.leaveRoomFromGame = leaveRoomFromGame;
-
-console.log('FPS Multiplayer client loaded. Server:', SERVER_URL);
+window.doConnect = doConnect; window.disconnect = disconnect; window.createRoom = createRoom;
+window.joinRoom = joinRoom; window.leaveRoom = leaveRoom; window.startGame = startGame;
+window.closeEscMenu = closeEscMenu; window.leaveRoomFromGame = leaveRoomFromGame;
 </script>
-
 </body>
 </html>
