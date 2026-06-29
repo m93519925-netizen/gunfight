@@ -57,9 +57,15 @@
   .killfeed-item .killer { color: #4a9eff; font-weight: 600; }
   .killfeed-item .victim { color: #e74c3c; font-weight: 600; }
   @keyframes fadeIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-  .ping-display { position: absolute; top: 15px; left: 15px; font-size: .8rem; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 4px; color: #aaa; }
+  
+  /* CSS cho Ping và FPS */
+  .ping-display, .fps-display { position: absolute; top: 15px; font-size: .8rem; background: rgba(0,0,0,0.6); padding: 4px 10px; border-radius: 4px; color: #aaa; }
+  .ping-display { left: 15px; }
+  .fps-display { left: 110px; }
   .ping-display .val { color: #2ecc71; font-weight: 600; }
   .ping-display .val.bad { color: #e74c3c; }
+  .fps-display .val { color: #f1c40f; font-weight: 600; }
+  
   #scoreboard { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 60; background: rgba(0,0,0,0.7); }
   #scoreboard.show { display: flex; }
   .scoreboard-box { width: 500px; background: #1a1a2e; border-radius: 12px; padding: 25px; border: 1px solid #333; }
@@ -131,7 +137,10 @@
     <div class="count" id="ammo-count">30</div>
   </div>
   <div class="killfeed" id="killfeed"></div>
+  
+  <!-- Thêm bộ đếm FPS và Ping -->
   <div class="ping-display">PING: <span class="val" id="ping-val">--</span>ms</div>
+  <div class="fps-display">FPS: <span class="val" id="fps-val">0</span></div>
 </div>
 
 <div id="scoreboard">
@@ -171,8 +180,8 @@ const RELOAD_TIME = 1500;
 
 let ws = null, myId = null, myName = '', currentRoom = null, currentMapId = null, mapData = null, inGame = false;
 let scene, camera, renderer;
-let gunGroup; // Mô hình súng góc nhìn thứ 1
-let muzzleFlashLight; // Đèn nhấp nháy khi bắn
+let gunGroup; 
+let muzzleFlashLight; 
 const otherPlayerMeshes = new Map();
 
 const myState = {
@@ -186,7 +195,12 @@ const nameTagElements = new Map();
 
 function connect(name) {
   ws = new WebSocket(SERVER_URL);
-  ws.onopen = () => { send({ type: 'join', payload: { name } }); setInterval(sendPing, 2000); };
+  // SỬA LỖI CHẬM: Chuyển lobby ngay lập tức khi kết nối WebSocket thành công
+  ws.onopen = () => {
+    send({ type: 'join', payload: { name } });
+    showScreen('lobby');
+    setInterval(sendPing, 2000);
+  };
   ws.onmessage = (e) => { let msg; try { msg = JSON.parse(e.data); } catch { return; } handleMessage(msg); };
   ws.onclose = () => { showScreen('connect'); inGame = false; if (mouseLocked) document.exitPointerLock(); };
   ws.onerror = () => { alert('Cannot connect to server. Make sure server.js is running.'); };
@@ -232,9 +246,11 @@ function showScreen(name) {
   ['connect', 'lobby', 'room'].forEach(s => document.getElementById(s + '-screen').classList.toggle('hidden', s !== name));
   document.getElementById('hud').classList.toggle('hidden', name !== 'game' && !inGame);
 }
+// SỬA LỖI CHẬM: Bỏ setTimeout đợi 500ms
 function doConnect() {
-  const name = document.getElementById('name-input').value.trim() || 'Player'; myName = name; connect(name);
-  setTimeout(() => { if (ws && ws.readyState === WebSocket.OPEN) showScreen('lobby'); }, 500);
+  const name = document.getElementById('name-input').value.trim() || 'Player'; 
+  myName = name; 
+  connect(name);
 }
 function disconnect() { if (ws) ws.close(); }
 function createRoom() { const mapId = document.getElementById('map-select').value; const roomName = document.getElementById('room-name-input').value.trim() || `${myName}'s Room`; send({ type: 'create_room', payload: { roomName, mapId } }); }
@@ -267,10 +283,10 @@ function initThree() {
   if (renderer) return;
   scene = new THREE.Scene();
   scene.background = new THREE.Color(mapData.skyColor || 0x87CEEB);
-  scene.fog = new THREE.Fog(mapData.skyColor || 0x87CEEB, 50, 150); // Sương mù mờ xa, trời sáng
+  scene.fog = new THREE.Fog(mapData.skyColor || 0x87CEEB, 60, 180); // Sương mù đẩy xa ra do map rộng
 
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
-  scene.add(camera); // Bắt buộc thêm camera vào scene để thấy súng gắn vào camera
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  scene.add(camera); 
 
   renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('game-canvas'), antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -278,14 +294,14 @@ function initThree() {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-  // Ánh sáng ban ngày
   const ambient = new THREE.AmbientLight(0xffffff, 0.8); scene.add(ambient);
   const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
-  dirLight.position.set(30, 50, 20); dirLight.castShadow = true;
+  dirLight.position.set(50, 80, 30); dirLight.castShadow = true;
   dirLight.shadow.mapSize.width = 2048; dirLight.shadow.mapSize.height = 2048;
-  dirLight.shadow.camera.left = -60; dirLight.shadow.camera.right = 60;
-  dirLight.shadow.camera.top = 60; dirLight.shadow.camera.bottom = -60;
-  dirLight.shadow.camera.far = 150; scene.add(dirLight);
+  // Mở rộng khung nhìn bóng đổ cho map to
+  dirLight.shadow.camera.left = -80; dirLight.shadow.camera.right = 80;
+  dirLight.shadow.camera.top = 80; dirLight.shadow.camera.bottom = -80;
+  dirLight.shadow.camera.far = 250; scene.add(dirLight);
 
   buildMap(); buildFirstPersonGun();
 
@@ -299,7 +315,7 @@ function buildMap() {
   const floorGeo = new THREE.PlaneGeometry(mapData.size.width, mapData.size.depth);
   const floorMat = new THREE.MeshStandardMaterial({ color: mapData.floorColor || 0x888888, roughness: 0.9 });
   const floor = new THREE.Mesh(floorGeo, floorMat); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
-  const grid = new THREE.GridHelper(mapData.size.width, 25, 0x444444, 0x222222); grid.position.y = 0.01; scene.add(grid);
+  const grid = new THREE.GridHelper(mapData.size.width, mapData.size.width, 0x444444, 0x222222); grid.position.y = 0.01; scene.add(grid);
   for (const obs of mapData.obstacles) {
     const [x, y, z] = obs.pos; const [w, h, d] = obs.size;
     const geo = new THREE.BoxGeometry(w, h, d);
@@ -308,7 +324,6 @@ function buildMap() {
   }
 }
 
-// Khởi tạo súng góc nhìn thứ nhất
 function buildFirstPersonGun() {
   gunGroup = new THREE.Group();
   const gunMat = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.6, metalness: 0.5 });
@@ -316,34 +331,25 @@ function buildFirstPersonGun() {
   const barrel = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, 0.4), gunMat); barrel.position.set(0, 0, -0.4); gunGroup.add(barrel);
   const mag = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.2, 0.1), gunMat); mag.position.set(0, -0.15, 0); gunGroup.add(mag);
   const handle = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.2, 0.1), gunMat); handle.position.set(0, -0.15, 0.1); gunGroup.add(handle);
-  
   muzzleFlashLight = new THREE.PointLight(0xffaa00, 0, 5); muzzleFlashLight.position.set(0, 0, -0.6); gunGroup.add(muzzleFlashLight);
-  
-  gunGroup.position.set(0.3, -0.3, -0.5); // Vị trí tay phải
+  gunGroup.position.set(0.3, -0.3, -0.5); 
   camera.add(gunGroup);
 }
 
-// Tạo mô hình 3D cho người chơi khác (hình người)
 function createPlayerMesh(color, name) {
   const group = new THREE.Group();
   const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.5, metalness: 0.2 });
   const darkMat = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.8 });
-
-  // Thân
   const torso = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.8, 0.4), mat);
   torso.position.y = -0.5; torso.castShadow = true; group.add(torso);
-  // Đầu
   const head = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.4, 0.4), new THREE.MeshStandardMaterial({color: 0xffdbac}));
   head.position.y = 0.1; head.castShadow = true; group.add(head);
-  // Tay
   const armGeo = new THREE.BoxGeometry(0.2, 0.7, 0.2);
   const leftArm = new THREE.Mesh(armGeo, mat); leftArm.position.set(-0.4, -0.5, 0); leftArm.castShadow = true; group.add(leftArm);
   const rightArm = new THREE.Mesh(armGeo, mat); rightArm.position.set(0.4, -0.5, 0); rightArm.castShadow = true; group.add(rightArm);
-  // Chân
   const legGeo = new THREE.BoxGeometry(0.25, 0.8, 0.25);
   const leftLeg = new THREE.Mesh(legGeo, darkMat); leftLeg.position.set(-0.15, -1.3, 0); leftLeg.castShadow = true; group.add(leftLeg);
   const rightLeg = new THREE.Mesh(legGeo, darkMat); rightLeg.position.set(0.15, -1.3, 0); rightLeg.castShadow = true; group.add(rightLeg);
-  // Súng nhỏ trên tay người chơi khác
   const gunMat = new THREE.MeshStandardMaterial({color: 0x111111});
   const enemyGun = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.15, 0.5), gunMat); enemyGun.position.set(0.4, -0.4, -0.3); group.add(enemyGun);
 
@@ -418,7 +424,7 @@ function tryShoot() {
   if (myState.ammo <= 0) { reload(); return; }
   lastShootTime = now; myState.ammo--; updateAmmoDisplay();
   send({ type: 'shoot', payload: { yaw: myState.yaw, pitch: myState.pitch } });
-  showMuzzleFlash(); // Hiệu ứng đèn nhấp nháy
+  showMuzzleFlash(); 
   if (myState.ammo <= 0) setTimeout(reload, 200);
 }
 function reload() {
@@ -462,10 +468,22 @@ function showScoreboard(show) {
   if (currentRoom) document.getElementById('sb-room-name').textContent = `📊 ${currentRoom.name}`; sb.classList.add('show');
 }
 
+// Biến đếm FPS
+let frameCount = 0;
+let lastFpsTime = performance.now();
+
 let lastFrameTime = performance.now();
 function animate() {
   requestAnimationFrame(animate); if (!inGame) return;
   const now = performance.now(); const dt = Math.min((now - lastFrameTime) / 1000, 0.05); lastFrameTime = now;
+
+  // Tính FPS
+  frameCount++;
+  if (now - lastFpsTime >= 1000) {
+    document.getElementById('fps-val').textContent = frameCount;
+    frameCount = 0;
+    lastFpsTime = now;
+  }
 
   if (myState.alive) updateMyMovement(dt);
   if (now - lastInputSent > INPUT_SEND_INTERVAL) { sendInput(); lastInputSent = now; }
@@ -473,33 +491,26 @@ function animate() {
   camera.position.copy(myState.position); camera.rotation.order = 'YXZ';
   camera.rotation.y = myState.yaw; camera.rotation.x = myState.pitch;
 
-  // Xử lý animation súng (chạy, nạp đạn)
   if (gunGroup) {
     const isMoving = keys['KeyW'] || keys['KeyA'] || keys['KeyS'] || keys['KeyD'];
     const isSprinting = (keys['ShiftLeft'] || keys['ShiftRight']) && isMoving;
-    
-    // Chạy nhanh: Góc nhìn (FOV) rộng ra, súng hạ xuống
     const targetFov = isSprinting && myState.onGround ? 85 : 75;
     camera.fov += (targetFov - camera.fov) * 0.1;
     camera.updateProjectionMatrix();
 
     if (myState.reloading) {
-      // Động tác nạp đạn: súng chúc xuống
       gunGroup.rotation.x += (1.2 - gunGroup.rotation.x) * 0.2;
     } else if (isSprinting) {
-      // Động tác chạy: súng đưa ra trước và thấp xuống
       gunGroup.rotation.x += (0.3 - gunGroup.rotation.x) * 0.1;
       gunGroup.position.z += (-0.7 - gunGroup.position.z) * 0.1;
       gunGroup.position.y += (-0.5 - gunGroup.position.y) * 0.1;
     } else {
-      // Trở về tư thế sẵn sàng bắn
       gunGroup.rotation.x += (0 - gunGroup.rotation.x) * 0.1;
       gunGroup.position.z += (-0.5 - gunGroup.position.z) * 0.1;
       gunGroup.position.y += (-0.3 - gunGroup.position.y) * 0.1;
     }
   }
 
-  // Nội suy vị trí cho người chơi khác
   const nowSec = performance.now() / 1000;
   for (const [id, obj] of otherPlayerMeshes) {
     const t = Math.min(1, (nowSec - obj.lastUpdate) / 0.1);
@@ -509,7 +520,6 @@ function animate() {
     obj.group.rotation.y = obj.lastRot + rotDiff * t;
   }
 
-  // Cập nhật HTML Name Tag
   const vec = new THREE.Vector3();
   for (const [id, obj] of otherPlayerMeshes) {
     if (!obj.group.visible) { obj.tagEl.style.display = 'none'; continue; }
@@ -522,7 +532,6 @@ function animate() {
     obj.tagEl.style.opacity = Math.max(0, Math.min(1, 1 - (dist - 30) / 20));
   }
 
-  // Cập nhật HUD
   document.getElementById('health-fill').style.width = Math.max(0, myState.health) + '%';
   document.getElementById('health-text').textContent = Math.ceil(Math.max(0, myState.health));
 
@@ -530,7 +539,7 @@ function animate() {
 }
 
 function updateMyMovement(dt) {
-  const speed = (keys['ShiftLeft'] || keys['ShiftRight']) ? 9 : 5; // Tốc độ chạy Shift
+  const speed = (keys['ShiftLeft'] || keys['ShiftRight']) ? 9 : 5; 
   const cosY = Math.cos(myState.yaw); const sinY = Math.sin(myState.yaw);
   let mx = 0, mz = 0;
   if (keys['KeyW']) { mx -= sinY; mz -= cosY; } if (keys['KeyS']) { mx += sinY; mz += cosY; }
