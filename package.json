@@ -1,0 +1,12 @@
+{
+  "name": "fps-multiplayer-3d",
+  "version": "1.0.0",
+  "description": "3D FPS Multiplayer Online Game (WebSocket + Three.js)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ws": "^8.16.0"
+  }
+}
