@@ -301,7 +301,7 @@ import * as THREE from 'three';
 // ============================================================
 //  CONFIGURATION
 // ============================================================
-const SERVER_URL = `ws://${location.hostname}:${location.port || 8080}`;
+const SERVER_URL = `${location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}`;
 document.getElementById('server-url-display').textContent = SERVER_URL;
 
 const INPUT_SEND_INTERVAL = 50; // ms — send input at 20Hz
