@@ -16,89 +16,123 @@ const WEAPON_DAMAGE = 25;
 const PLAYER_RADIUS = 0.5;
 const MAX_HEALTH = 100;
 
-// Map definitions đổi màu trời sáng sủa hơn
+// Map definitions đổi màu trời sáng sủa hơn & map rộng ra
 const MAPS = {
   warehouse: {
     name: 'Warehouse',
-    size: { width: 50, depth: 50, height: 10 },
+    size: { width: 90, depth: 90, height: 12 },
     obstacles: [
-      { pos: [0, 5, -25], size: [50, 10, 1] }, { pos: [0, 5, 25],  size: [50, 10, 1] },
-      { pos: [-25, 5, 0], size: [1, 10, 50] }, { pos: [25, 5, 0],  size: [1, 10, 50] },
-      { pos: [-10, 1.5, -10], size: [6, 3, 6], color: 0x8B4513 },
-      { pos: [10, 1.5, 10],   size: [6, 3, 6], color: 0x8B4513 },
-      { pos: [-10, 1.5, 10],  size: [6, 3, 6], color: 0x556B2F },
-      { pos: [10, 1.5, -10],  size: [6, 3, 6], color: 0x556B2F },
-      { pos: [0, 1.5, 0],     size: [8, 3, 3], color: 0x696969 },
-      { pos: [-18, 1.5, 0],   size: [3, 3, 8], color: 0x696969 },
-      { pos: [18, 1.5, 0],    size: [3, 3, 8], color: 0x696969 },
-      { pos: [0, 0.75, -15], size: [4, 1.5, 2], color: 0x4A4A4A },
-      { pos: [0, 0.75, 15],  size: [4, 1.5, 2], color: 0x4A4A4A },
+      // Vách bao ngoài (rộng 90)
+      { pos: [0, 6, -45], size: [90, 12, 1] }, { pos: [0, 6, 45],  size: [90, 12, 1] },
+      { pos: [-45, 6, 0], size: [1, 12, 90] }, { pos: [45, 6, 0],  size: [1, 12, 90] },
+      // Container và vật cản rải rác
+      { pos: [-20, 1.5, -20], size: [6, 3, 6], color: 0x8B4513 },
+      { pos: [20, 1.5, 20],   size: [6, 3, 6], color: 0x8B4513 },
+      { pos: [-20, 1.5, 20],  size: [6, 3, 6], color: 0x556B2F },
+      { pos: [20, 1.5, -20],  size: [6, 3, 6], color: 0x556B2F },
+      { pos: [0, 1.5, 0],     size: [10, 3, 4], color: 0x696969 },
+      { pos: [-30, 1.5, 0],   size: [4, 3, 12], color: 0x696969 },
+      { pos: [30, 1.5, 0],    size: [4, 3, 12], color: 0x696969 },
+      { pos: [0, 1.5, -30],   size: [12, 3, 4], color: 0x696969 },
+      { pos: [0, 1.5, 30],    size: [12, 3, 4], color: 0x696969 },
+      { pos: [0, 0.75, -15], size: [6, 1.5, 2], color: 0x4A4A4A },
+      { pos: [0, 0.75, 15],  size: [6, 1.5, 2], color: 0x4A4A4A },
+      // Thêm vật cản ở vùng ngoại vi mới
+      { pos: [-38, 1.5, -38], size: [8, 3, 8], color: 0x8B4513 },
+      { pos: [38, 1.5, 38],   size: [8, 3, 8], color: 0x8B4513 },
+      { pos: [-38, 1.5, 38],  size: [8, 3, 8], color: 0x556B2F },
+      { pos: [38, 1.5, -38],  size: [8, 3, 8], color: 0x556B2F },
+      { pos: [-15, 1.5, 35],  size: [4, 3, 10], color: 0x696969 },
+      { pos: [15, 1.5, -35],  size: [4, 3, 10], color: 0x696969 },
     ],
     spawnPoints: [
-      { x: -20, y: 1.7, z: -20 }, { x: 20, y: 1.7, z: -20 },
-      { x: -20, y: 1.7, z: 20 },  { x: 20, y: 1.7, z: 20 },
-      { x: 0, y: 1.7, z: -22 },   { x: 0, y: 1.7, z: 22 },
-      { x: -22, y: 1.7, z: 0 },   { x: 22, y: 1.7, z: 0 },
+      { x: -40, y: 1.7, z: -40 }, { x: 40, y: 1.7, z: -40 },
+      { x: -40, y: 1.7, z: 40 },  { x: 40, y: 1.7, z: 40 },
+      { x: 0, y: 1.7, z: -42 },   { x: 0, y: 1.7, z: 42 },
+      { x: -42, y: 1.7, z: 0 },   { x: 42, y: 1.7, z: 0 },
+      { x: -25, y: 1.7, z: 25 },  { x: 25, y: 1.7, z: -25 },
+      { x: -35, y: 1.7, z: 10 },  { x: 35, y: 1.7, z: -10 },
     ],
-    floorColor: 0x888888, wallColor: 0xAAAAAA, skyColor: 0x87CEEB, // Trời sáng
+    floorColor: 0x888888, wallColor: 0xAAAAAA, skyColor: 0x87CEEB,
   },
   desert: {
     name: 'Desert Outpost',
-    size: { width: 70, depth: 70, height: 12 },
+    size: { width: 120, depth: 120, height: 14 },
     obstacles: [
-      { pos: [0, 3, -35], size: [70, 6, 1] }, { pos: [0, 3, 35],  size: [70, 6, 1] },
-      { pos: [-35, 3, 0], size: [1, 6, 70] }, { pos: [35, 3, 0],  size: [1, 6, 70] },
-      { pos: [-15, 1.5, -15], size: [8, 3, 8], color: 0xC2B280 },
-      { pos: [15, 1.5, 15],   size: [8, 3, 8], color: 0xC2B280 },
-      { pos: [-15, 1.5, 15],  size: [8, 3, 8], color: 0xC2B280 },
-      { pos: [15, 1.5, -15],  size: [8, 3, 8], color: 0xC2B280 },
-      { pos: [0, 2, 0], size: [10, 4, 10], color: 0xA0522D },
-      { pos: [-25, 0.75, 0], size: [2, 1.5, 12], color: 0xD2B48C },
-      { pos: [25, 0.75, 0],  size: [2, 1.5, 12], color: 0xD2B48C },
-      { pos: [0, 0.75, -25], size: [12, 1.5, 2], color: 0xD2B48C },
-      { pos: [0, 0.75, 25],  size: [12, 1.5, 2], color: 0xD2B48C },
+      // Vách bao ngoài (rộng 120)
+      { pos: [0, 3, -60], size: [120, 6, 1] }, { pos: [0, 3, 60],  size: [120, 6, 1] },
+      { pos: [-60, 3, 0], size: [1, 6, 120] }, { pos: [60, 3, 0],  size: [1, 6, 120] },
+      // Lô cốt và bao cát
+      { pos: [-25, 1.5, -25], size: [8, 3, 8], color: 0xC2B280 },
+      { pos: [25, 1.5, 25],   size: [8, 3, 8], color: 0xC2B280 },
+      { pos: [-25, 1.5, 25],  size: [8, 3, 8], color: 0xC2B280 },
+      { pos: [25, 1.5, -25],  size: [8, 3, 8], color: 0xC2B280 },
+      { pos: [0, 2, 0], size: [12, 4, 12], color: 0xA0522D },
+      { pos: [-40, 0.75, 0], size: [3, 1.5, 15], color: 0xD2B48C },
+      { pos: [40, 0.75, 0],  size: [3, 1.5, 15], color: 0xD2B48C },
+      { pos: [0, 0.75, -40], size: [15, 1.5, 3], color: 0xD2B48C },
+      { pos: [0, 0.75, 40],  size: [15, 1.5, 3], color: 0xD2B48C },
+      // Vật cản vùng ngoại vi
+      { pos: [-50, 1.5, -50], size: [10, 3, 10], color: 0xA0522D },
+      { pos: [50, 1.5, 50],   size: [10, 3, 10], color: 0xA0522D },
+      { pos: [-50, 1.5, 50],  size: [10, 3, 10], color: 0xA0522D },
+      { pos: [50, 1.5, -50],  size: [10, 3, 10], color: 0xA0522D },
+      { pos: [0, 0.75, -55],  size: [20, 1.5, 3], color: 0xD2B48C },
+      { pos: [0, 0.75, 55],   size: [20, 1.5, 3], color: 0xD2B48C },
+      { pos: [-55, 0.75, 0],  size: [3, 1.5, 20], color: 0xD2B48C },
+      { pos: [55, 0.75, 0],   size: [3, 1.5, 20], color: 0xD2B48C },
     ],
     spawnPoints: [
-      { x: -30, y: 1.7, z: -30 }, { x: 30, y: 1.7, z: -30 },
-      { x: -30, y: 1.7, z: 30 },  { x: 30, y: 1.7, z: 30 },
-      { x: 0, y: 1.7, z: -30 },   { x: 0, y: 1.7, z: 30 },
-      { x: -30, y: 1.7, z: 0 },   { x: 30, y: 1.7, z: 0 },
+      { x: -50, y: 1.7, z: -50 }, { x: 50, y: 1.7, z: -50 },
+      { x: -50, y: 1.7, z: 50 },  { x: 50, y: 1.7, z: 50 },
+      { x: 0, y: 1.7, z: -50 },   { x: 0, y: 1.7, z: 50 },
+      { x: -50, y: 1.7, z: 0 },   { x: 50, y: 1.7, z: 0 },
+      { x: -30, y: 1.7, z: 30 },  { x: 30, y: 1.7, z: -30 },
+      { x: -45, y: 1.7, z: 20 },  { x: 45, y: 1.7, z: -20 },
     ],
-    floorColor: 0xD2B48C, wallColor: 0x8B7355, skyColor: 0x87CEEB, // Trời sáng
+    floorColor: 0xD2B48C, wallColor: 0x8B7355, skyColor: 0x87CEEB,
   },
   sniper: {
     name: 'Sniper Tower',
-    size: { width: 40, depth: 40, height: 20 },
+    size: { width: 80, depth: 80, height: 22 },
     obstacles: [
-      { pos: [0, 10, -20], size: [40, 20, 1] }, { pos: [0, 10, 20],  size: [40, 20, 1] },
-      { pos: [-20, 10, 0], size: [1, 20, 40] }, { pos: [20, 10, 0],  size: [1, 20, 40] },
-      { pos: [0, 5, 0],   size: [6, 10, 6], color: 0x4A4A4A },
-      { pos: [0, 10.5, 0], size: [8, 1, 8], color: 0x666666 },
-      { pos: [-14, 4, -14], size: [4, 8, 4], color: 0x555555 },
-      { pos: [14, 4, -14],  size: [4, 8, 4], color: 0x555555 },
-      { pos: [-14, 4, 14],  size: [4, 8, 4], color: 0x555555 },
-      { pos: [14, 4, 14],   size: [4, 8, 4], color: 0x555555 },
-      { pos: [-14, 8.5, -14], size: [5, 1, 5], color: 0x777777 },
-      { pos: [14, 8.5, -14],  size: [5, 1, 5], color: 0x777777 },
-      { pos: [-14, 8.5, 14],  size: [5, 1, 5], color: 0x777777 },
-      { pos: [14, 8.5, 14],   size: [5, 1, 5], color: 0x777777 },
-      { pos: [-10, 2, -10], size: [2, 4, 6], color: 0x444444 },
-      { pos: [10, 2, -10],  size: [2, 4, 6], color: 0x444444 },
-      { pos: [-10, 2, 10],  size: [2, 4, 6], color: 0x444444 },
-      { pos: [10, 2, 10],   size: [2, 4, 6], color: 0x444444 },
-      { pos: [-6, 0.75, 0],  size: [2, 1.5, 4], color: 0x333333 },
-      { pos: [6, 0.75, 0],   size: [2, 1.5, 4], color: 0x333333 },
-      { pos: [0, 0.75, -6],  size: [4, 1.5, 2], color: 0x333333 },
-      { pos: [0, 0.75, 6],   size: [4, 1.5, 2], color: 0x333333 },
+      // Vách bao ngoài (rộng 80)
+      { pos: [0, 11, -40], size: [80, 22, 1] }, { pos: [0, 11, 40],  size: [80, 22, 1] },
+      { pos: [-40, 11, 0], size: [1, 22, 80] }, { pos: [40, 11, 0],  size: [1, 22, 80] },
+      // Tháp giữa
+      { pos: [0, 5, 0],   size: [8, 10, 8], color: 0x4A4A4A },
+      { pos: [0, 10.5, 0], size: [12, 1, 12], color: 0x666666 },
+      // Tháp 4 góc
+      { pos: [-30, 4, -30], size: [6, 8, 6], color: 0x555555 },
+      { pos: [30, 4, -30],  size: [6, 8, 6], color: 0x555555 },
+      { pos: [-30, 4, 30],  size: [6, 8, 6], color: 0x555555 },
+      { pos: [30, 4, 30],   size: [6, 8, 6], color: 0x555555 },
+      { pos: [-30, 8.5, -30], size: [8, 1, 8], color: 0x777777 },
+      { pos: [30, 8.5, -30],  size: [8, 1, 8], color: 0x777777 },
+      { pos: [-30, 8.5, 30],  size: [8, 1, 8], color: 0x777777 },
+      { pos: [30, 8.5, 30],   size: [8, 1, 8], color: 0x777777 },
+      // Dốc lên tháp
+      { pos: [-20, 2, -20], size: [2, 4, 8], color: 0x444444 },
+      { pos: [20, 2, -20],  size: [2, 4, 8], color: 0x444444 },
+      { pos: [-20, 2, 20],  size: [2, 4, 8], color: 0x444444 },
+      { pos: [20, 2, 20],   size: [2, 4, 8], color: 0x444444 },
+      // Vật cản ngoài
+      { pos: [-10, 0.75, 0],  size: [3, 1.5, 6], color: 0x333333 },
+      { pos: [10, 0.75, 0],   size: [3, 1.5, 6], color: 0x333333 },
+      { pos: [0, 0.75, -10],  size: [6, 1.5, 3], color: 0x333333 },
+      { pos: [0, 0.75, 10],   size: [6, 1.5, 3], color: 0x333333 },
+      { pos: [-35, 1.5, -15], size: [4, 3, 4], color: 0x555555 },
+      { pos: [35, 1.5, 15],   size: [4, 3, 4], color: 0x555555 },
     ],
     spawnPoints: [
-      { x: -16, y: 1.7, z: -16 }, { x: 16, y: 1.7, z: -16 },
-      { x: -16, y: 1.7, z: 16 },  { x: 16, y: 1.7, z: 16 },
-      { x: 0, y: 1.7, z: -16 },   { x: 0, y: 1.7, z: 16 },
-      { x: -16, y: 1.7, z: 0 },   { x: 16, y: 1.7, z: 0 },
-      { x: -14, y: 9.5, z: -14 }, { x: 14, y: 9.5, z: 14 },
+      { x: -35, y: 1.7, z: -35 }, { x: 35, y: 1.7, z: -35 },
+      { x: -35, y: 1.7, z: 35 },  { x: 35, y: 1.7, z: 35 },
+      { x: 0, y: 1.7, z: -35 },   { x: 0, y: 1.7, z: 35 },
+      { x: -35, y: 1.7, z: 0 },   { x: 35, y: 1.7, z: 0 },
+      { x: -30, y: 9.5, z: -30 }, { x: 30, y: 9.5, z: 30 },
+      { x: 0, y: 9.5, z: 0 },     { x: -15, y: 1.7, z: 30 },
     ],
-    floorColor: 0xAAAAAA, wallColor: 0x999999, skyColor: 0x87CEEB, // Trời sáng
+    floorColor: 0xAAAAAA, wallColor: 0x999999, skyColor: 0x87CEEB,
   },
 };
 
@@ -238,7 +272,7 @@ setInterval(() => {
 }, TICK_INTERVAL);
 
 function updatePlayerMovement(player) {
-  const map = MAPS[player.room.mapId]; const dt = TICK_DT; const speed = player.input.run ? 9 : 5; // Tốc độ chạy Shift
+  const map = MAPS[player.room.mapId]; const dt = TICK_DT; const speed = player.input.run ? 9 : 5; 
   const cosY = Math.cos(player.rotation.yaw); const sinY = Math.sin(player.rotation.yaw);
   let mx = 0, mz = 0;
   if (player.input.f) { mx -= sinY; mz -= cosY; } if (player.input.b) { mx += sinY; mz += cosY; }
